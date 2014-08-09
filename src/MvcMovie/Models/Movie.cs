@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
-using System.Data.Entity;
 
 namespace MvcMovie.Models
 {
@@ -29,9 +28,4 @@ public class Movie
     [StringLength(5)]
     public string Rating { get; set; }
 }
-
-    public class MovieDBContext : DbContext
-    {
-        public DbSet<Movie> Movies { get; set; }
-    }
 }
