@@ -1,7 +1,8 @@
 ﻿using System.Data.Entity;
 using System.Diagnostics;
+using MvcMovie.Models;
 
-namespace MvcMovie.Models
+namespace MvcMovie.Infrastructure.Data
 {
     public class MovieDbContext : DbContext
     {

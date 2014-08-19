@@ -1,54 +1,36 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data;
 using System.Data.Entity;
-using System.Linq;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
+using MvcMovie.Core.Interfaces;
+using MvcMovie.Infrastructure.Data;
+using MvcMovie.Infrastructure.Data.Repositories;
 using MvcMovie.Models;
 
 namespace MvcMovie.Controllers
 {
     public class MoviesController : Controller
     {
+        private readonly IMovieRepository _movieRepository;
         private MovieDbContext db = new MovieDbContext();
+
+        public MoviesController(IMovieRepository movieRepository)
+        {
+            _movieRepository = movieRepository;
+        }
+
+        public MoviesController() : this(new EfMovieRepository())
+        {}
 
         // GET: /Movies/
         public ActionResult Index(string movieGenre, string searchString)
         {
-            var GenreLst = new List<string>();
+            ViewBag.movieGenre = 
+                new SelectList(_movieRepository.ListGenres());
 
-            var GenreQry = from d in db.Movies
-                           orderby d.Genre
-                           select d.Genre;
 
-            GenreLst.AddRange(GenreQry.Distinct());
-            ViewBag.movieGenre = new SelectList(GenreLst);
-
-            var movies = from m in db.Movies
-                         select m;
-
-            if (!String.IsNullOrEmpty(searchString))
-            {
-                movies = movies.Where(s => s.Title.Contains(searchString));
-            }
-
-            if (!string.IsNullOrEmpty(movieGenre))
-            {
-                movies = movies.Where(x => x.Genre == movieGenre);
-            }
-
-            return View(movies);
+            return View(_movieRepository.ListMovies(movieGenre,searchString));
         }
-
-        /*
-MovieDBContext db = new MovieDBContext();
-Movie movie = new Movie();
-movie.Title = "Gone with the Wind";
-db.Movies.Add(movie);
-db.SaveChanges();        // <= Will throw server side validation exception  
-         * */
 
         // GET: /Movies/Details/5
 public ActionResult Details(int? id)

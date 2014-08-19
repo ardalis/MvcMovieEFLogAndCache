@@ -1,3 +1,5 @@
+using MvcMovie.Infrastructure.Data;
+
 namespace MvcMovie.Migrations
 {
     using MvcMovie.Models;
@@ -6,14 +8,14 @@ namespace MvcMovie.Migrations
     using System.Data.Entity.Migrations;
     using System.Linq;
 
-    internal sealed class Configuration : DbMigrationsConfiguration<MvcMovie.Models.MovieDbContext>
+    internal sealed class Configuration : DbMigrationsConfiguration<MovieDbContext>
     {
         public Configuration()
         {
             AutomaticMigrationsEnabled = false;
         }
 
-        protected override void Seed(MvcMovie.Models.MovieDbContext context)
+        protected override void Seed(MovieDbContext context)
         {
             context.Movies.AddOrUpdate(i => i.Title,
                 new Movie
